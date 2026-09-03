@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="刘浩炫的工程、AI、项目与实践履历">
   <meta name="theme-color" content="#0a1716">
+  <meta name="robots" content="index, follow">
   <title>刘浩炫 | AI × Engineering Portfolio</title>
   <link rel="preload" href="assets/hero-ai-aero.webp" as="image" type="image/webp">
   <link rel="stylesheet" href="assets/phosphor.css">
@@ -165,12 +166,22 @@
     .hero-media {
       position: absolute;
       inset: 0;
-      z-index: -2;
+      z-index: -3;
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: 57% center;
       filter: var(--image-filter);
+    }
+    .aero-flow {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: .72;
+      mix-blend-mode: screen;
     }
     .hero::before {
       content: "";
@@ -430,7 +441,9 @@
       .hero-lead { animation-delay: .1s; }
       .hero .actions { animation-delay: .16s; }
       .hero .eyebrow { animation-delay: .05s; }
+      .hero-media { animation: engine-drift 18s ease-in-out infinite alternate; }
       @keyframes hero-in { from { opacity: 0; transform: translateY(28px); } }
+      @keyframes engine-drift { from { transform: scale(1.01) translate3d(0, 0, 0); } to { transform: scale(1.045) translate3d(-.7%, -.3%, 0); } }
     }
     @media (max-width: 1100px) {
       .site-nav { grid-template-columns: 1fr auto; }
@@ -497,6 +510,7 @@
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
       .reveal { opacity: 1; transform: none; }
+      .aero-flow { opacity: .34; }
     }
     @media print {
       .site-nav, .actions, .tabs, .toast, dialog { display: none !important; }
@@ -528,6 +542,7 @@
   <main id="content">
     <section class="hero" id="home" aria-labelledby="hero-title">
       <img class="hero-media" src="assets/hero-ai-aero.webp" alt="航空发动机与透明计算核心融合的概念视觉">
+      <canvas class="aero-flow" id="aero-flow" aria-hidden="true"></canvas>
       <div class="hero-inner">
         <p class="eyebrow">AI × ENGINEERING × GROWTH</p>
         <h1 id="hero-title"><span>刘浩炫</span><small>飞行器制造工程准本科生，AI 与智能制造探索者</small></h1>
@@ -701,6 +716,153 @@
 
   <script>
     const root = document.documentElement;
+    const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+
+    // Inspired by the motion language of React Bits Aero Shards, Threads and Hyperspeed.
+    function initAeroFlow() {
+      const canvas = document.getElementById('aero-flow');
+      const hero = canvas?.closest('.hero');
+      const context = canvas?.getContext('2d', { alpha: true });
+      if (!canvas || !hero || !context) return () => {};
+
+      let width = 0;
+      let height = 0;
+      let ratio = 1;
+      let frame = 0;
+      let lastFrame = 0;
+      let running = true;
+      let pointerX = 0;
+      let pointerY = 0;
+      let targetX = 0;
+      let targetY = 0;
+
+      const particles = Array.from({ length: 38 }, (_, index) => ({
+        lane: index % 11,
+        offset: ((index * 47.37) % 100) / 100,
+        speed: 0.000035 + (index % 7) * 0.000004,
+        size: .55 + (index % 4) * .28
+      }));
+
+      function lanePoint(lane, x, time) {
+        const normalized = x / Math.max(width, 1);
+        const laneOffset = lane - 5;
+        const base = height * (.18 + lane * .064);
+        const compression = Math.exp(-Math.pow((normalized - .73) * 4.2, 2));
+        const pressureCurve = laneOffset * compression * height * .013;
+        const wave = Math.sin(normalized * 7.5 + time * .00042 + lane * .7) * (3 + Math.abs(laneOffset) * .65);
+        return base + pressureCurve + wave + pointerY * (laneOffset / 5) * 7;
+      }
+
+      function resize() {
+        const bounds = hero.getBoundingClientRect();
+        width = Math.max(1, Math.round(bounds.width));
+        height = Math.max(1, Math.round(bounds.height));
+        ratio = Math.min(devicePixelRatio || 1, 1.5);
+        canvas.width = Math.round(width * ratio);
+        canvas.height = Math.round(height * ratio);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        draw(performance.now(), true);
+      }
+
+      function draw(time, force = false) {
+        if (!force && time - lastFrame < 28) return;
+        lastFrame = time;
+        pointerX += (targetX - pointerX) * .045;
+        pointerY += (targetY - pointerY) * .045;
+        context.clearRect(0, 0, width, height);
+
+        const pale = context.createLinearGradient(0, 0, width, 0);
+        pale.addColorStop(0, 'rgba(179, 220, 207, 0)');
+        pale.addColorStop(.22, 'rgba(179, 220, 207, .17)');
+        pale.addColorStop(.72, 'rgba(207, 234, 225, .34)');
+        pale.addColorStop(1, 'rgba(207, 234, 225, 0)');
+
+        for (let lane = 0; lane < 11; lane += 1) {
+          context.beginPath();
+          for (let x = -40; x <= width + 40; x += 26) {
+            const shiftedX = x + pointerX * 8;
+            const y = lanePoint(lane, shiftedX, time);
+            if (x === -40) context.moveTo(x, y);
+            else context.lineTo(x, y);
+          }
+          context.strokeStyle = lane === 3 || lane === 7 ? 'rgba(232, 111, 59, .34)' : pale;
+          context.lineWidth = lane === 3 || lane === 7 ? 1.1 : .72;
+          context.stroke();
+        }
+
+        if (!motionQuery.matches) {
+          for (const particle of particles) {
+            const progress = (time * particle.speed + particle.offset) % 1;
+            const x = progress * (width + 180) - 90;
+            const y = lanePoint(particle.lane, x, time);
+            const trail = 18 + particle.speed * 180000;
+            const gradient = context.createLinearGradient(x - trail, y, x, y);
+            gradient.addColorStop(0, 'rgba(232, 111, 59, 0)');
+            gradient.addColorStop(1, 'rgba(242, 180, 145, .78)');
+            context.beginPath();
+            context.moveTo(x - trail, y);
+            context.lineTo(x, y);
+            context.strokeStyle = gradient;
+            context.lineWidth = particle.size;
+            context.stroke();
+          }
+        }
+      }
+
+      function animate(time) {
+        if (!running) return;
+        draw(time);
+        frame = requestAnimationFrame(animate);
+      }
+
+      function onPointerMove(event) {
+        const bounds = hero.getBoundingClientRect();
+        targetX = (event.clientX - bounds.left) / bounds.width - .5;
+        targetY = (event.clientY - bounds.top) / bounds.height - .5;
+      }
+
+      function onPointerLeave() {
+        targetX = 0;
+        targetY = 0;
+      }
+
+      function onVisibilityChange() {
+        running = !document.hidden;
+        cancelAnimationFrame(frame);
+        if (running && !motionQuery.matches) frame = requestAnimationFrame(animate);
+      }
+
+      function onMotionChange() {
+        cancelAnimationFrame(frame);
+        running = true;
+        draw(performance.now(), true);
+        if (!motionQuery.matches) frame = requestAnimationFrame(animate);
+      }
+
+      const resizeObserver = new ResizeObserver(resize);
+      resizeObserver.observe(hero);
+      hero.addEventListener('pointermove', onPointerMove, { passive: true });
+      hero.addEventListener('pointerleave', onPointerLeave);
+      document.addEventListener('visibilitychange', onVisibilityChange);
+      motionQuery.addEventListener('change', onMotionChange);
+      resize();
+      if (!motionQuery.matches) frame = requestAnimationFrame(animate);
+
+      return () => {
+        running = false;
+        cancelAnimationFrame(frame);
+        resizeObserver.disconnect();
+        hero.removeEventListener('pointermove', onPointerMove);
+        hero.removeEventListener('pointerleave', onPointerLeave);
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+        motionQuery.removeEventListener('change', onMotionChange);
+      };
+    }
+
+    const stopAeroFlow = initAeroFlow();
+    addEventListener('pagehide', stopAeroFlow, { once: true });
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle.querySelector('i');
     function syncThemeIcon() {
@@ -790,7 +952,7 @@
       image.addEventListener('error', () => image.closest('.project-visual')?.classList.add('is-error'));
     });
 
-    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reducedMotion = motionQuery.matches;
     const reveals = document.querySelectorAll('.reveal');
     if (reducedMotion || !('IntersectionObserver' in window)) reveals.forEach(item => item.classList.add('visible'));
     else {
