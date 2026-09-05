@@ -4,535 +4,44 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="刘浩炫的工程、AI、项目与实践履历">
-  <meta name="theme-color" content="#0a1716">
+  <meta name="theme-color" content="#050B10">
   <meta name="robots" content="index, follow">
-  <title>刘浩炫 | 航空动态个人简介</title>
+  <title>刘浩炫 | AERO GLASS · Flight Lab</title>
   <link rel="preload" href="assets/hero-ai-aero.webp" as="image" type="image/webp">
-  <link rel="stylesheet" href="assets/phosphor.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="assets/icons.css">
+  <script>
+    // file:// has an opaque origin: let the local CSS load fonts without a CORS preload.
+    (() => { if (location.protocol === 'http:' || location.protocol === 'https:') {
+      const fontPreload = document.createElement('link');
+      fontPreload.rel = 'preload'; fontPreload.as = 'font'; fontPreload.type = 'font/woff2';
+      fontPreload.crossOrigin = 'anonymous'; fontPreload.href = 'assets/Geist-Latin.woff2';
+      document.head.append(fontPreload);
+    } })();
+  </script>
+<link rel="stylesheet" href="assets/aviation.css">
   <script>
     (() => {
-      const saved = localStorage.getItem('lh-aviation-theme');
-      document.documentElement.dataset.theme = saved || 'dark';
+      try {
+        const theme = localStorage.getItem('lh-aviation-theme');
+        document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+        if (localStorage.getItem('lh-aviation-motion') === 'paused') document.documentElement.classList.add('motion-paused');
+      } catch (_) { /* Storage is optional, including when opening a local file. */ }
     })();
   </script>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0a1716;
-      --surface: #102321;
-      --surface-2: #17302d;
-      --ink: #eef2eb;
-      --muted: #a8b9b2;
-      --dim: #758b84;
-      --line: rgba(238, 242, 235, .18);
-      --line-strong: rgba(238, 242, 235, .42);
-      --accent: #e86f3b;
-      --accent-ink: #17100c;
-      --nav: rgba(10, 23, 22, .84);
-      --image-filter: saturate(.92) contrast(1.04);
-      --shadow: 0 28px 90px rgba(2, 11, 10, .28);
-    }
-    html[data-theme="light"] {
-      color-scheme: light;
-      --bg: #e8eee9;
-      --surface: #f3f6f2;
-      --surface-2: #d9e4dd;
-      --ink: #14201e;
-      --muted: #526762;
-      --dim: #6d807a;
-      --line: rgba(20, 32, 30, .18);
-      --line-strong: rgba(20, 32, 30, .46);
-      --accent: #c0471b;
-      --accent-ink: #fff8f2;
-      --nav: rgba(232, 238, 233, .86);
-      --image-filter: saturate(.78) contrast(.98) brightness(1.04);
-      --shadow: 0 28px 90px rgba(28, 53, 46, .14);
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-    body {
-      margin: 0;
-      min-width: 320px;
-      background: var(--bg);
-      color: var(--ink);
-      font: 15px/1.65 "Segoe UI Variable", "PingFang SC", "Microsoft YaHei", sans-serif;
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-    }
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: 80;
-      pointer-events: none;
-      opacity: .035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-    }
-    a { color: inherit; }
-    button { font: inherit; }
-    img { display: block; max-width: 100%; }
-    ::selection { background: var(--accent); color: var(--accent-ink); }
-    .skip {
-      position: fixed;
-      left: 16px;
-      top: 10px;
-      z-index: 100;
-      padding: 10px 14px;
-      background: var(--accent);
-      color: var(--accent-ink);
-      transform: translateY(-160%);
-    }
-    .skip:focus { transform: none; }
-    .site-nav {
-      position: fixed;
-      inset: 0 0 auto;
-      z-index: 50;
-      height: 72px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 24px;
-      padding: 0 clamp(18px, 3.8vw, 64px);
-      border-bottom: 1px solid var(--line);
-      background: var(--nav);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-    }
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      width: max-content;
-      text-decoration: none;
-      font-weight: 850;
-      letter-spacing: -.04em;
-    }
-    .brand-mark {
-      display: grid;
-      place-items: center;
-      width: 34px;
-      height: 34px;
-      background: var(--accent);
-      color: var(--accent-ink);
-      font-size: 13px;
-      letter-spacing: -.06em;
-    }
-    .nav-links { display: flex; align-items: center; gap: clamp(18px, 2.5vw, 42px); }
-    .nav-links a {
-      position: relative;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 700;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .nav-links a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 100%;
-      bottom: -8px;
-      height: 2px;
-      background: var(--accent);
-      transition: right .28s cubic-bezier(.16, 1, .3, 1);
-    }
-    .nav-links a:hover::after, .nav-links a:focus-visible::after, .nav-links a.active::after { right: 0; }
-    .nav-actions { display: flex; justify-content: flex-end; gap: 8px; }
-    .icon-button {
-      display: grid;
-      place-items: center;
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--ink);
-      cursor: pointer;
-      transition: background .2s, color .2s, transform .2s;
-    }
-    .icon-button:hover, .icon-button:focus-visible { background: var(--accent); color: var(--accent-ink); }
-    .icon-button:active, .button:active, .tab:active { transform: translateY(1px); }
-    .menu-button { display: none; }
-    .hero {
-      position: relative;
-      min-height: 100dvh;
-      display: grid;
-      align-items: end;
-      isolation: isolate;
-      overflow: hidden;
-      border-bottom: 1px solid var(--line);
-      background: #071312;
-    }
-    .hero-media {
-      position: absolute;
-      inset: 0;
-      z-index: -3;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: 57% center;
-      filter: var(--image-filter);
-    }
-    .aero-flow {
-      position: absolute;
-      inset: 0;
-      z-index: -2;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      opacity: .72;
-      mix-blend-mode: screen;
-    }
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background:
-        linear-gradient(90deg, rgba(3, 13, 12, .92) 0%, rgba(3, 13, 12, .74) 34%, rgba(3, 13, 12, .14) 72%),
-        linear-gradient(0deg, rgba(3, 13, 12, .84) 0%, transparent 38%);
-    }
-    .hero-inner {
-      width: min(1500px, 100%);
-      margin: auto;
-      padding: 120px clamp(20px, 4.4vw, 72px) 180px;
-    }
-    .eyebrow {
-      margin: 0 0 24px;
-      color: #f1a681;
-      font: 760 11px/1.2 ui-monospace, "Cascadia Code", monospace;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-    .hero h1 {
-      max-width: 850px;
-      margin: 0;
-      color: #f2f5ef;
-      font-size: clamp(60px, 9.6vw, 150px);
-      font-weight: 900;
-      line-height: .8;
-      letter-spacing: -.085em;
-    }
-    .hero h1 span { display: block; }
-    .hero h1 small {
-      display: block;
-      margin-top: 25px;
-      color: #bfd0c9;
-      font-size: clamp(18px, 2.1vw, 31px);
-      font-weight: 560;
-      line-height: 1.22;
-      letter-spacing: -.035em;
-    }
-    .hero-lead {
-      max-width: 550px;
-      margin: 23px 0 0;
-      color: #bed0c8;
-      font-size: clamp(15px, 1.3vw, 19px);
-    }
-    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
-    .button {
-      min-height: 48px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      padding: 11px 18px;
-      border: 1px solid var(--line-strong);
-      background: var(--surface);
-      color: var(--ink);
-      font-weight: 800;
-      text-decoration: none;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: background .22s, border-color .22s, color .22s, transform .15s;
-    }
-    .hero .button { border-color: rgba(240, 245, 239, .38); background: rgba(8, 26, 24, .78); color: #f2f5ef; }
-    .button.primary, .hero .button.primary { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
-    .button:hover, .button:focus-visible { border-color: var(--accent); }
-    .button.primary:hover, .button.primary:focus-visible { background: #f18758; }
-    html[data-theme="light"] .button.primary:hover,
-    html[data-theme="light"] .button.primary:focus-visible { background: #a93a12; }
-    .metrics-rail {
-      position: absolute;
-      inset: auto 0 0;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      border-top: 1px solid rgba(238, 242, 235, .25);
-      background: rgba(6, 21, 19, .78);
-      color: #eff4ee;
-      backdrop-filter: blur(16px);
-      scrollbar-width: none;
-    }
-    .metrics-rail::-webkit-scrollbar { display: none; }
-    .metric {
-      min-height: 104px;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      align-items: center;
-      gap: 14px;
-      padding: 18px clamp(14px, 2vw, 30px);
-      border-right: 1px solid rgba(238, 242, 235, .18);
-    }
-    .metric:last-child { border: 0; }
-    .metric b { color: #f08a5c; font-size: clamp(22px, 2.5vw, 39px); line-height: 1; letter-spacing: -.06em; }
-    .metric span { color: #b9c9c2; font-size: 12px; line-height: 1.45; }
-    .section {
-      width: min(1500px, 100%);
-      margin: auto;
-      padding: clamp(86px, 10vw, 154px) clamp(20px, 4.4vw, 72px);
-      border-bottom: 1px solid var(--line);
-    }
-    .section-title {
-      max-width: 920px;
-      margin: 0 0 clamp(40px, 6vw, 86px);
-      font-size: clamp(45px, 7.2vw, 112px);
-      font-weight: 900;
-      line-height: .88;
-      letter-spacing: -.075em;
-    }
-    .section-intro { max-width: 650px; margin: -50px 0 70px; color: var(--muted); font-size: clamp(17px, 1.5vw, 21px); }
-    .about-grid { display: grid; grid-template-columns: .78fr 1.22fr; gap: clamp(38px, 9vw, 150px); align-items: start; }
-    .about-statement { margin: 0; font-size: clamp(27px, 3.8vw, 56px); font-weight: 720; line-height: 1.12; letter-spacing: -.045em; }
-    .about-copy { display: grid; gap: 34px; }
-    .about-copy p { max-width: 650px; margin: 0; color: var(--muted); font-size: clamp(16px, 1.35vw, 20px); }
-    .identity-table { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line-strong); }
-    .identity-item { padding: 20px 18px 20px 0; border-bottom: 1px solid var(--line); }
-    .identity-item span, .identity-item strong { display: block; }
-    .identity-item span { color: var(--dim); font-size: 12px; }
-    .identity-item strong { margin-top: 4px; font-size: 15px; }
-    .impact {
-      width: min(1500px, calc(100% - clamp(40px, 8.8vw, 144px)));
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: .68fr 1.32fr;
-      background: var(--surface-2);
-      box-shadow: var(--shadow);
-    }
-    .impact-aside { min-height: 640px; padding: clamp(32px, 5vw, 78px); background: var(--accent); color: var(--accent-ink); }
-    .impact-aside i { font-size: 43px; }
-    .impact-aside h2 { margin: clamp(90px, 12vw, 180px) 0 0; font-size: clamp(43px, 6vw, 88px); line-height: .88; letter-spacing: -.07em; }
-    .impact-aside p { max-width: 350px; margin: 25px 0 0; font-weight: 650; }
-    .outcome-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
-    .outcome {
-      min-height: 320px;
-      padding: clamp(28px, 4vw, 60px);
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
-    .outcome:nth-child(2n) { border-right: 0; }
-    .outcome:nth-last-child(-n+2) { border-bottom: 0; }
-    .outcome b { display: block; color: var(--accent); font-size: clamp(42px, 6vw, 82px); line-height: 1; letter-spacing: -.07em; }
-    .outcome h3 { margin: 38px 0 9px; font-size: clamp(18px, 2vw, 27px); line-height: 1.2; }
-    .outcome p { margin: 0; color: var(--muted); }
-    .projects-head { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 34px; }
-    .projects-head .section-title { margin: 0; }
-    .tabs { display: flex; gap: 8px; }
-    .tab {
-      min-height: 44px;
-      padding: 9px 14px;
-      border: 1px solid var(--line);
-      background: transparent;
-      color: var(--muted);
-      font-weight: 780;
-      cursor: pointer;
-    }
-    .tab[aria-selected="true"] { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
-    .project-panel[hidden] { display: none; }
-    .project-stage { display: grid; grid-template-columns: 1.2fr .8fr; min-height: 660px; border: 1px solid var(--line); }
-    .project-visual { position: relative; min-height: 520px; overflow: hidden; background: var(--surface-2); }
-    .project-visual img { width: 100%; height: 100%; object-fit: cover; }
-    .project-visual.engineering img { object-position: 68% center; }
-    .project-visual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(4, 15, 14, .54), transparent 45%); pointer-events: none; }
-    .project-copy { display: flex; flex-direction: column; padding: clamp(34px, 5vw, 74px); background: var(--surface); }
-    .project-date { color: var(--accent); font: 750 12px/1.4 ui-monospace, "Cascadia Code", monospace; letter-spacing: .08em; }
-    .project-copy h3 { margin: 28px 0 18px; font-size: clamp(38px, 5vw, 74px); line-height: .9; letter-spacing: -.07em; }
-    .project-copy > p { margin: 0; color: var(--muted); font-size: 17px; }
-    .project-facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; margin: 36px 0; background: var(--line); }
-    .project-fact { padding: 18px; background: var(--surface-2); }
-    .project-fact b, .project-fact span { display: block; }
-    .project-fact b { font-size: 24px; letter-spacing: -.04em; }
-    .project-fact span { color: var(--dim); font-size: 12px; }
-    .project-copy .button { align-self: flex-start; margin-top: auto; }
-    .project-error { display: none; position: absolute; inset: 0; place-items: center; padding: 24px; color: var(--muted); text-align: center; background: var(--surface-2); }
-    .project-visual.is-error .project-error { display: grid; }
-    .skills-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
-    .skill-lead { min-height: 600px; display: flex; flex-direction: column; justify-content: space-between; padding: clamp(34px, 6vw, 84px); background: var(--surface); }
-    .skill-lead h3 { max-width: 630px; margin: 0; font-size: clamp(38px, 5.4vw, 78px); line-height: .94; letter-spacing: -.065em; }
-    .skill-lead p { max-width: 510px; margin: 25px 0 0; color: var(--muted); }
-    .skill-lead .ph { align-self: flex-end; color: var(--accent); font-size: clamp(70px, 11vw, 160px); }
-    .skill-list { display: grid; background: var(--line); gap: 1px; }
-    .skill-group { padding: clamp(26px, 3.5vw, 48px); background: var(--surface); }
-    .skill-group h3 { margin: 0 0 20px; color: var(--accent); font-size: 14px; }
-    .skill-group ul { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 24px; margin: 0; padding: 0; list-style: none; }
-    .skill-group li { display: flex; justify-content: space-between; gap: 20px; color: var(--muted); }
-    .skill-group li b { color: var(--ink); font: 700 12px/1.7 ui-monospace, monospace; }
-    .creation-feature { display: grid; grid-template-columns: .82fr 1.18fr; align-items: stretch; background: var(--surface-2); }
-    .creation-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(38px, 6vw, 88px); }
-    .creation-copy h2 { margin: 0; font-size: clamp(42px, 6vw, 88px); line-height: .9; letter-spacing: -.07em; }
-    .creation-copy p { max-width: 540px; margin: 26px 0 0; color: var(--muted); }
-    .creation-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 30px; }
-    .creation-list span { padding: 7px 10px; border: 1px solid var(--line-strong); color: var(--muted); font-size: 12px; }
-    .creation-media { min-height: 600px; background: var(--surface); }
-    .creation-media img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
-    .education-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
-    .education-main, .credentials { padding: clamp(32px, 5vw, 70px); background: var(--surface); }
-    .education-main time { color: var(--accent); font: 750 12px/1.4 ui-monospace, monospace; }
-    .education-main h3 { margin: 30px 0 8px; font-size: clamp(34px, 4vw, 62px); line-height: .95; letter-spacing: -.06em; }
-    .education-main h4 { margin: 0; color: var(--muted); font-size: 18px; }
-    .education-main p { max-width: 660px; margin: 35px 0 0; color: var(--muted); }
-    .credentials { display: grid; align-content: center; gap: 1px; background: var(--line); padding: 0; }
-    .credential { display: grid; grid-template-columns: auto 1fr; gap: 18px; padding: clamp(28px, 4vw, 52px); background: var(--surface); }
-    .credential i { color: var(--accent); font-size: 30px; }
-    .credential b, .credential span { display: block; }
-    .credential span { margin-top: 8px; color: var(--muted); font-size: 13px; }
-    .gallery { display: grid; grid-template-columns: 1.7fr repeat(3, 1fr); gap: 10px; margin-top: 10px; }
-    .cert { position: relative; aspect-ratio: 1.38; margin: 0; overflow: hidden; background: var(--surface-2); cursor: zoom-in; }
-    .cert:first-child { grid-row: span 2; aspect-ratio: auto; }
-    .cert img { width: 100%; height: 100%; object-fit: cover; transition: transform .55s cubic-bezier(.16, 1, .3, 1), filter .3s; }
-    .cert:hover img, .cert:focus-visible img { transform: scale(1.035); filter: contrast(1.03); }
-    .contact {
-      width: min(1500px, 100%);
-      margin: auto;
-      padding: clamp(100px, 13vw, 210px) clamp(20px, 4.4vw, 72px) 52px;
-    }
-    .contact h2 { max-width: 1100px; margin: 0; font-size: clamp(55px, 10.5vw, 166px); line-height: .78; letter-spacing: -.09em; }
-    .contact h2 span { color: var(--accent); }
-    .contact-bottom { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 40px; margin-top: clamp(70px, 10vw, 150px); padding-top: 25px; border-top: 1px solid var(--line-strong); }
-    .contact-list { display: flex; flex-wrap: wrap; gap: 15px 28px; color: var(--muted); }
-    .contact-list a { text-decoration-thickness: 1px; text-underline-offset: 5px; }
-    .copyright { color: var(--dim); font-size: 12px; text-align: right; }
-    dialog {
-      width: min(1100px, calc(100% - 32px));
-      max-height: calc(100dvh - 32px);
-      padding: 0;
-      border: 1px solid var(--line-strong);
-      background: var(--surface);
-      color: var(--ink);
-      box-shadow: var(--shadow);
-    }
-    dialog::backdrop { background: rgba(2, 10, 9, .82); backdrop-filter: blur(8px); }
-    .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 60px; padding: 10px 12px 10px 20px; border-bottom: 1px solid var(--line); }
-    .dialog-body { max-height: calc(100dvh - 110px); overflow: auto; padding: 18px; }
-    .dialog-body img { width: 100%; height: auto; }
-    .toast {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      z-index: 90;
-      max-width: min(360px, calc(100% - 40px));
-      padding: 13px 16px;
-      border: 1px solid var(--line-strong);
-      background: var(--surface);
-      color: var(--ink);
-      box-shadow: var(--shadow);
-      opacity: 0;
-      transform: translateY(12px);
-      pointer-events: none;
-      transition: opacity .2s, transform .2s;
-    }
-    .toast.show { opacity: 1; transform: none; }
-    .reveal { opacity: 0; transform: translateY(34px); transition: opacity .75s cubic-bezier(.16, 1, .3, 1), transform .75s cubic-bezier(.16, 1, .3, 1); }
-    .reveal.visible { opacity: 1; transform: none; }
-    @media (prefers-reduced-transparency: reduce) {
-      .site-nav, .metrics-rail { backdrop-filter: none; -webkit-backdrop-filter: none; }
-    }
-    @media (prefers-reduced-motion: no-preference) {
-      .hero h1, .hero-lead, .hero .actions, .hero .eyebrow { animation: hero-in .85s both cubic-bezier(.16, 1, .3, 1); }
-      .hero-lead { animation-delay: .1s; }
-      .hero .actions { animation-delay: .16s; }
-      .hero .eyebrow { animation-delay: .05s; }
-      .hero-media { animation: engine-drift 18s ease-in-out infinite alternate; }
-      @keyframes hero-in { from { opacity: 0; transform: translateY(28px); } }
-      @keyframes engine-drift { from { transform: scale(1.01) translate3d(0, 0, 0); } to { transform: scale(1.045) translate3d(-.7%, -.3%, 0); } }
-    }
-    @media (max-width: 1100px) {
-      .site-nav { grid-template-columns: 1fr auto; }
-      .nav-links {
-        position: fixed;
-        inset: 72px 0 auto;
-        display: none;
-        padding: 28px clamp(20px, 4.4vw, 72px);
-        border-bottom: 1px solid var(--line);
-        background: var(--bg);
-      }
-      .nav-links.open { display: grid; grid-template-columns: repeat(2, 1fr); }
-      .nav-actions { grid-column: 2; grid-row: 1; }
-      .menu-button { display: grid; }
-      .metrics-rail { grid-template-columns: repeat(5, minmax(170px, 1fr)); overflow-x: auto; }
-      .impact { grid-template-columns: 1fr; }
-      .impact-aside { min-height: auto; }
-      .impact-aside h2 { margin-top: 80px; }
-      .project-stage { grid-template-columns: 1fr; }
-      .project-copy { min-height: 510px; }
-      .skills-grid, .creation-feature, .education-grid { grid-template-columns: 1fr; }
-      .creation-media { min-height: 480px; }
-      .gallery { grid-template-columns: repeat(3, 1fr); }
-      .cert:first-child { grid-column: span 2; grid-row: span 2; }
-    }
-    @media (max-width: 767px) {
-      .site-nav { height: 64px; padding-inline: 16px; }
-      .brand > span:last-child { display: none; }
-      .nav-links { top: 64px; }
-      .hero-inner { padding: 108px 18px 210px; }
-      .hero-media { object-position: 64% center; }
-      .hero::before { background: linear-gradient(90deg, rgba(3, 13, 12, .91), rgba(3, 13, 12, .38)), linear-gradient(0deg, rgba(3, 13, 12, .9), transparent 55%); }
-      .hero h1 { font-size: clamp(50px, 17vw, 82px); }
-      .metrics-rail { grid-template-columns: repeat(5, 170px); }
-      .metric { min-height: 116px; }
-      .section { width: 100%; padding: 82px 18px; }
-      .section-title { font-size: clamp(43px, 14vw, 70px); }
-      .section-intro { margin: -20px 0 45px; }
-      .about-grid { grid-template-columns: 1fr; gap: 52px; }
-      .identity-table { grid-template-columns: 1fr; }
-      .impact { width: calc(100% - 36px); }
-      .outcome-grid { grid-template-columns: 1fr; }
-      .outcome { min-height: 260px; border-right: 0; border-bottom: 1px solid var(--line) !important; }
-      .outcome:last-child { border-bottom: 0 !important; }
-      .projects-head { align-items: start; flex-direction: column; }
-      .project-stage { min-height: auto; }
-      .project-visual { min-height: 380px; }
-      .project-copy { min-height: 480px; padding: 32px 24px; }
-      .project-facts { grid-template-columns: 1fr; }
-      .skill-lead { min-height: 500px; padding: 34px 24px; }
-      .skill-group { padding: 28px 24px; }
-      .skill-group ul { grid-template-columns: 1fr; }
-      .creation-copy { padding: 50px 24px; }
-      .creation-media { min-height: 420px; }
-      .education-main { padding: 44px 24px; }
-      .gallery { grid-template-columns: repeat(2, 1fr); }
-      .cert:first-child { grid-column: span 2; aspect-ratio: 1.38; }
-      .contact { padding: 100px 18px 34px; }
-      .contact h2 { font-size: clamp(52px, 18vw, 85px); }
-      .contact-bottom { grid-template-columns: 1fr; align-items: start; }
-      .copyright { text-align: left; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-      .reveal { opacity: 1; transform: none; }
-      .aero-flow { opacity: .34; }
-    }
-    @media print {
-      .site-nav, .actions, .tabs, .toast, dialog { display: none !important; }
-      .hero { min-height: 250mm; }
-      .reveal { opacity: 1; transform: none; }
-    }
-  </style>
-  <link rel="stylesheet" href="assets/aviation.css">
+  <noscript><style>.project-panel[hidden]{display:block;margin-top:36px}.tabs,#motion-toggle,#theme-toggle,#menu-toggle{display:none}.site-nav .nav-links{position:static;visibility:visible;opacity:1;transform:none;display:flex;flex-wrap:wrap;height:auto;padding:5px;background:var(--surface)}.nav-links a{opacity:1;transform:none;font-size:11px;padding:5px}.site-nav{position:absolute;grid-template-columns:1fr}.nav-links .drawer-cta{display:none}</style></noscript>
 </head>
 <body>
   <div class="aviation-background" aria-hidden="true">
-    <div class="aircraft-scene"><img src="assets/hero-ai-aero.webp" alt="" fetchpriority="high"></div>
+    <div class="ambient-light"></div>
+    <div class="engineering-grid"></div>
     <canvas class="aero-flow" id="aero-flow"></canvas>
   </div>
   <div class="menu-backdrop" id="menu-backdrop" aria-hidden="true"></div>
   <a class="skip" href="#content">跳到主要内容</a>
-  <header class="site-nav">
-    <a class="brand" href="#home" aria-label="返回首页">
-      <span class="brand-mark">LH</span>
+  <div id="nav-sentinel" aria-hidden="true"></div>
+  <header class="site-nav glass">
+    <a class="brand" href="#home" aria-label="LH LIU HAOXUAN，返回首页">
+      <span class="brand-mark glass-control"><svg viewBox="0 0 40 40" aria-hidden="true" fill="none"><path d="M7 10v20h10M23 10v20M33 10v20M23 20h10" stroke="currentColor" stroke-width="2.3" stroke-linecap="square"/><path d="m20 5 2 13 14 7-14-3-2 13-2-13-14 3 14-7Z" fill="currentColor" opacity=".45"/></svg><span class="sr-only">LH</span></span>
       <span>LIU HAOXUAN</span>
     </a>
     <nav class="nav-links" id="nav-links" aria-label="页面导航">
@@ -541,41 +50,44 @@
       <a href="#projects">代表项目</a>
       <a href="#skills">能力结构</a>
       <a href="#education">教育与证书</a>
-      <a class="drawer-cta button primary" href="tel:15679768749">联系我<i class="ph ph-arrow-up-right"></i></a>
+      <a class="drawer-cta button primary" href="tel:15679768749">联系我<i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
     </nav>
     <div class="nav-actions">
-      <button class="icon-button" id="motion-toggle" aria-label="暂停背景动效" title="暂停背景动效" aria-pressed="false"><i class="ph ph-pause"></i></button>
-      <button class="icon-button" id="theme-toggle" aria-label="切换明暗主题" title="切换明暗主题"><i class="ph ph-sun"></i></button>
-      <button class="icon-button menu-button" id="menu-toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="nav-links" aria-haspopup="dialog"><i class="ph ph-list menu-symbol"></i><i class="ph ph-x close-symbol"></i></button>
+      <button class="icon-button" id="motion-toggle" aria-label="暂停背景动效" title="暂停背景动效" aria-pressed="false"><i class="ph ph-pause" aria-hidden="true"></i></button>
+      <button class="icon-button" id="theme-toggle" aria-label="切换明暗主题" title="切换明暗主题"><i class="ph ph-sun" aria-hidden="true"></i></button>
+      <button class="icon-button menu-button" id="menu-toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="nav-links" ><i class="ph ph-list menu-symbol" aria-hidden="true"></i><i class="ph ph-x close-symbol" aria-hidden="true"></i></button>
     </div>
   </header>
 
   <main id="content">
     <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero-aircraft" aria-hidden="true"><div class="aircraft-scene"><img src="assets/hero-ai-aero.webp" alt="" width="1672" height="941" fetchpriority="high"></div></div>
+      <div class="hero-hud hud-top" aria-hidden="true"><span>AERO GLASS / FLIGHT LAB</span><span>AIRCRAFT MANUFACTURING</span></div>
+      <div class="hero-hud hud-side" aria-hidden="true"><span class="hud-cross"></span><span>ENGINEERING<br>× ARTIFICIAL INTELLIGENCE</span><span class="hud-scale"></span></div>
 
       <div class="hero-inner">
-        <p class="eyebrow">AI × ENGINEERING × GROWTH</p>
-        <h1 id="hero-title"><span>刘浩炫</span><small>飞行器制造工程准本科生，AI 与智能制造探索者</small></h1>
+        <p class="eyebrow hero-label"><span class="sr-only">AI × ENGINEERING × GROWTH</span><span aria-hidden="true" style="--char:0">A</span><span aria-hidden="true" style="--char:1">I</span><span aria-hidden="true" style="--char:2">&nbsp;</span><span aria-hidden="true" style="--char:3">×</span><span aria-hidden="true" style="--char:4">&nbsp;</span><span aria-hidden="true" style="--char:5">E</span><span aria-hidden="true" style="--char:6">N</span><span aria-hidden="true" style="--char:7">G</span><span aria-hidden="true" style="--char:8">I</span><span aria-hidden="true" style="--char:9">N</span><span aria-hidden="true" style="--char:10">E</span><span aria-hidden="true" style="--char:11">E</span><span aria-hidden="true" style="--char:12">R</span><span aria-hidden="true" style="--char:13">I</span><span aria-hidden="true" style="--char:14">N</span><span aria-hidden="true" style="--char:15">G</span><span aria-hidden="true" style="--char:16">&nbsp;</span><span aria-hidden="true" style="--char:17">×</span><span aria-hidden="true" style="--char:18">&nbsp;</span><span aria-hidden="true" style="--char:19">G</span><span aria-hidden="true" style="--char:20">R</span><span aria-hidden="true" style="--char:21">O</span><span aria-hidden="true" style="--char:22">W</span><span aria-hidden="true" style="--char:23">T</span><span aria-hidden="true" style="--char:24">H</span></p>
+        <h1 id="hero-title"><span>刘浩炫</span><small><span>飞行器制造工程准本科生，</span><span>AI 与智能制造探索者</span></small></h1>
         <p class="hero-lead">用工程思维连接 AI、软件开发与真实业务，把新技术转化为可衡量、可复盘的结果。</p>
         <div class="actions">
-          <a class="button primary" href="#projects"><i class="ph ph-arrow-down-right"></i>查看代表项目</a>
-          <a class="button" href="tel:15679768749"><i class="ph ph-phone"></i>联系我</a>
+          <a class="button primary" href="#projects"><i class="ph ph-arrow-down-right" aria-hidden="true"></i>查看代表项目</a>
+          <a class="button" href="tel:15679768749"><i class="ph ph-phone" aria-hidden="true"></i>联系我</a>
         </div>
       </div>
-      <div class="metrics-rail" id="highlights" aria-label="核心成果">
-        <div class="metric"><b>Top 15%</b><span>全国 3,000+ 新人中的同期排名</span></div>
-        <div class="metric"><b>40%</b><span>团队整体人效提升</span></div>
-        <div class="metric"><b>-25%</b><span>单个用户获取成本</span></div>
-        <div class="metric"><b>60 FPS</b><span>游戏稳定运行帧率</span></div>
-        <div class="metric"><b>10万+</b><span>数码科技视频累计播放</span></div>
+      <div class="metrics-rail glass-panel" tabindex="0" id="highlights" aria-label="核心成果">
+        <div class="metric"><b data-reveal="number">Top 15%</b><span>全国 3,000+ 新人中的同期排名</span></div>
+        <div class="metric"><b data-reveal="number">40%</b><span>团队整体人效提升</span></div>
+        <div class="metric"><b data-reveal="number">-25%</b><span>单个用户获取成本</span></div>
+        <div class="metric"><b data-reveal="number">60 FPS</b><span>游戏稳定运行帧率</span></div>
+        <div class="metric"><b data-reveal="number">10万+</b><span>数码科技视频累计播放</span></div>
       </div>
     </section>
 
-    <section class="section reveal" aria-labelledby="about-title">
-      <h2 class="section-title" id="about-title">把想法做成<br>可验证的结果</h2>
+    <section class="section" id="about" aria-labelledby="about-title">
+      <h2 class="section-title" id="about-title" data-reveal="mask">把想法做成<br>可验证的结果</h2>
       <div class="about-grid">
         <p class="about-statement">我关注技术如何真正进入现实：解决问题、提高效率，也创造增长。</p>
-        <div class="about-copy">
+        <div class="about-copy" data-reveal="slide">
           <p>从 Python 游戏开发、生成式 AI 工具，到校园业务和内容运营，我习惯先理解场景，再快速完成原型，最后用数据复盘。</p>
           <div class="identity-table" aria-label="个人信息">
             <div class="identity-item"><span>方向</span><strong>AI 应用与智能制造</strong></div>
@@ -587,48 +99,49 @@
       </div>
     </section>
 
-    <section class="impact reveal" id="experience" aria-labelledby="experience-title">
-      <div class="impact-aside">
-        <i class="ph ph-trend-up"></i>
-        <h2 id="experience-title">从 0 到 1<br>推动增长</h2>
+    <section class="impact" id="experience" aria-labelledby="experience-title">
+      <div class="impact-aside"><p class="eyebrow" data-reveal="label">MISSION RECORD / 实践记录</p>
+        <i class="ph ph-airplane-in-flight" aria-hidden="true"></i>
+        <h2 id="experience-title" data-reveal="mask">从 0 到 1<br>推动增长</h2>
         <p>星辰科技校园合伙人，2026.07 至今。首月完成业务突破，并搭建 5 人校园团队。</p>
       </div>
       <div class="outcome-grid">
-        <article class="outcome"><b>2,000+</b><h3>首月直接利润</h3><p>通过精准推广与社群运营，在全国同期 3,000+ 新人中进入前 450。</p></article>
-        <article class="outcome"><b>5 / 5</b><h3>成员完成首单</h3><p>从零搭建培训路径，5 名零基础成员在两周内全部完成首单。</p></article>
-        <article class="outcome"><b>18%</b><h3>活动转化提升</h3><p>落地社群裂变与精准触达方案，同时将获客成本降低 25%。</p></article>
-        <article class="outcome"><b>12%</b><h3>区域环比增长</h3><p>3 项推广建议被采纳，推动区域后续两个月业绩持续增长。</p></article>
+        <article class="outcome" data-reveal="slide" data-delay="0"><span class="mission-index" aria-hidden="true">01 / FIELD RESULT</span><b data-reveal="number">2,000+</b><h3>首月直接利润</h3><p>通过精准推广与社群运营，在全国同期 3,000+ 新人中进入前 450。</p></article>
+        <article class="outcome" data-reveal="slide" data-delay="80"><span class="mission-index" aria-hidden="true">02 / FIELD RESULT</span><b data-reveal="number">5 / 5</b><h3>成员完成首单</h3><p>从零搭建培训路径，5 名零基础成员在两周内全部完成首单。</p></article>
+        <article class="outcome" data-reveal="slide" data-delay="160"><span class="mission-index" aria-hidden="true">03 / FIELD RESULT</span><b data-reveal="number">18%</b><h3>活动转化提升</h3><p>落地社群裂变与精准触达方案，同时将获客成本降低 25%。</p></article>
+        <article class="outcome" data-reveal="slide" data-delay="240"><span class="mission-index" aria-hidden="true">04 / FIELD RESULT</span><b data-reveal="number">12%</b><h3>区域环比增长</h3><p>3 项推广建议被采纳，推动区域后续两个月业绩持续增长。</p></article>
       </div>
     </section>
 
-    <section class="section reveal" id="projects" aria-labelledby="projects-title">
+    <section class="section" id="projects" aria-labelledby="projects-title">
       <div class="projects-head">
         <div>
-          <p class="eyebrow">SELECTED WORK</p>
-          <h2 class="section-title" id="projects-title">代表项目</h2>
+          <p class="eyebrow">PROJECT HANGAR</p>
+          <h2 class="section-title" id="projects-title" data-reveal="mask">代表项目</h2>
         </div>
         <div class="tabs" role="tablist" aria-label="项目分类">
           <button class="tab" role="tab" aria-selected="true" aria-controls="dev-panel" id="dev-tab">开发项目</button>
           <button class="tab" role="tab" aria-selected="false" aria-controls="content-panel" id="content-tab">内容运营</button>
         </div>
       </div>
+      <div class="project-deck">
       <div class="project-panel" id="dev-panel" role="tabpanel" aria-labelledby="dev-tab">
         <article class="project-stage">
           <div class="project-visual engineering">
             <img src="assets/tank-project.png" alt="坦克大战游戏项目主视觉" loading="lazy">
             <div class="project-error">图片暂时无法加载，项目信息仍可正常阅读。</div>
           </div>
-          <div class="project-copy">
-            <span class="project-date">2025.10 - 2026.02</span>
+          <div class="project-copy glass-panel" data-tilt>
+            <p class="project-code">PROJECT / 001 <span>GAME ENGINEERING</span></p><span class="project-date">2025.10 - 2026.02</span>
             <h3>坦克大战<br>游戏开发</h3>
             <p>使用 Python 与 Pygame 独立完成完整游戏系统，覆盖玩家操控、敌方 AI、射击、碰撞、地图、生命值与积分。</p>
             <div class="project-facts">
-              <div class="project-fact"><b>2,000+</b><span>代码行数</span></div>
-              <div class="project-fact"><b>3 种</b><span>敌方 AI 行为模式</span></div>
-              <div class="project-fact"><b>60 FPS</b><span>稳定运行</span></div>
-              <div class="project-fact"><b>40+</b><span>源码访问</span></div>
+              <div class="project-fact"><b data-reveal="number">2,000+</b><span>代码行数</span></div>
+              <div class="project-fact"><b data-reveal="number">3 种</b><span>敌方 AI 行为模式</span></div>
+              <div class="project-fact"><b data-reveal="number">60 FPS</b><span>稳定运行</span></div>
+              <div class="project-fact"><b data-reveal="number">40+</b><span>源码访问</span></div>
             </div>
-            <a class="button primary" href="https://jackliu-hx.github.io/tankedazhan/" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i>在线试玩</a>
+            <a class="button primary" href="https://jackliu-hx.github.io/tankedazhan/" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out" aria-hidden="true"></i>在线试玩</a>
           </div>
         </article>
       </div>
@@ -638,49 +151,50 @@
             <img src="assets/bofang.jpg" alt="数码科技短视频累计播放量截图" loading="lazy">
             <div class="project-error">图片暂时无法加载，项目信息仍可正常阅读。</div>
           </div>
-          <div class="project-copy">
-            <span class="project-date">2026.07 - 至今</span>
+          <div class="project-copy glass-panel" data-tilt>
+            <p class="project-code">PROJECT / 002 <span>CONTENT OPERATIONS</span></p><span class="project-date">2026.07 - 至今</span>
             <h3>数码科技<br>内容运营</h3>
             <p>独立完成选题、脚本、制作与发布，并让内容流量与校园业务协同，形成品牌曝光、用户触达和团队招募入口。</p>
             <div class="project-facts">
-              <div class="project-fact"><b>10万+</b><span>累计播放量</span></div>
-              <div class="project-fact"><b>全链路</b><span>策划至发布</span></div>
-              <div class="project-fact"><b>AI</b><span>辅助内容生产</span></div>
-              <div class="project-fact"><b>增长</b><span>业务协同目标</span></div>
+              <div class="project-fact"><b data-reveal="number">10万+</b><span>累计播放量</span></div>
+              <div class="project-fact"><b data-reveal="number">全链路</b><span>策划至发布</span></div>
+              <div class="project-fact"><b data-reveal="number">AI</b><span>辅助内容生产</span></div>
+              <div class="project-fact"><b data-reveal="number">增长</b><span>业务协同目标</span></div>
             </div>
           </div>
         </article>
       </div>
+      </div>
     </section>
 
-    <section class="section reveal" id="skills" aria-labelledby="skills-title">
-      <h2 class="section-title" id="skills-title">能力结构</h2>
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <h2 class="section-title" id="skills-title" data-reveal="mask">能力结构</h2>
       <p class="section-intro">不是一张技能清单，而是把工程、AI、工具和业务组合起来解决问题。</p>
       <div class="skills-grid">
         <div class="skill-lead">
           <div><h3>能写代码，也能理解业务现场</h3><p>持续学习 AI 与软件工程，同时用内容和增长实践检验技术表达与协作能力。</p></div>
-          <i class="ph ph-cpu"></i>
+          <i class="ph ph-cpu" aria-hidden="true"></i>
         </div>
-        <div class="skill-list">
-          <article class="skill-group"><h3>编程语言</h3><ul><li><span>Python</span><b>76%</b></li><li><span>Java</span><b>48%</b></li><li><span>SQL</span><b>55%</b></li></ul></article>
-          <article class="skill-group"><h3>AI 能力</h3><ul><li><span>AI 工具应用</span><b>86%</b></li><li><span>提示词工程</span><b>80%</b></li><li><span>Agent / 微调</span><b>54%</b></li></ul></article>
-          <article class="skill-group"><h3>工具与业务</h3><ul><li><span>阿里云</span><b>72%</b></li><li><span>Excel</span><b>68%</b></li><li><span>市场拓展</span><b>82%</b></li><li><span>内容运营</span><b>74%</b></li></ul></article>
+        <div class="skill-list"><div class="matrix-head" aria-hidden="true"><span>AIRCRAFT SYSTEM MATRIX</span><span>SELF ASSESSMENT</span></div>
+          <article class="skill-group"><h3>编程语言</h3><ul><li tabindex="0"><span>Python</span><span class="system-level"><span class="system-segments" aria-hidden="true"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class=""></i><i class=""></i></span><b>76%</b></span></li><li tabindex="0"><span>Java</span><span class="system-level"><span class="system-segments" aria-hidden="true"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span><b>48%</b></span></li><li tabindex="0"><span>SQL</span><span class="system-level"><span class="system-segments" aria-hidden="true"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span><b>55%</b></span></li></ul></article>
+          <article class="skill-group"><h3>AI 能力</h3><ul><li tabindex="0"><span>AI 工具应用</span><span class="system-level"><span class="system-segments" aria-hidden="true"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class=""></i></span><b>86%</b></span></li><li tabindex="0"><span>提示词工程</span><span class="system-level"><span class="system-segments" aria-hidden="true"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class=""></i><i class=""></i></span><b>80%</b></span></li><li tabindex="0"><span>Agent / 微调</span><span class="system-level"><span class="system-segments" aria-hidden="true"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span><b>54%</b></span></li></ul></article>
+          <article class="skill-group"><h3>工具与业务</h3><ul><li tabindex="0"><span>阿里云</span><span class="system-level"><span class="system-segments" aria-hidden="true"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class=""></i><i class=""></i></span><b>72%</b></span></li><li tabindex="0"><span>Excel</span><span class="system-level"><span class="system-segments" aria-hidden="true"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class=""></i><i class=""></i><i class=""></i></span><b>68%</b></span></li><li tabindex="0"><span>市场拓展</span><span class="system-level"><span class="system-segments" aria-hidden="true"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class=""></i></span><b>82%</b></span></li><li tabindex="0"><span>内容运营</span><span class="system-level"><span class="system-segments" aria-hidden="true"><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class="lit"></i><i class=""></i><i class=""></i></span><b>74%</b></span></li></ul></article>
         </div>
       </div>
     </section>
 
-    <section class="creation-feature reveal" id="creation" aria-labelledby="creation-title">
-      <div class="creation-copy">
-        <h2 id="creation-title">内容也是<br>增长工具</h2>
+    <section class="creation-feature" id="creation" aria-labelledby="creation-title">
+      <div class="creation-copy" data-reveal="slide">
+        <h2 id="creation-title" data-reveal="mask">内容也是<br>增长工具</h2>
         <p>将选题、脚本、制作、发布和数据复盘连成一条完整链路，让内容不只获得播放，也能服务业务目标。</p>
         <div class="creation-list" aria-label="内容能力"><span>独立策划</span><span>数据复盘</span><span>AI 辅助</span><span>业务协同</span></div>
       </div>
       <div class="creation-media"><img src="assets/bofang.jpg" alt="短视频账号播放数据截图" loading="lazy"></div>
     </section>
 
-    <section class="section reveal" id="education" aria-labelledby="education-title">
-      <h2 class="section-title" id="education-title">教育与证书</h2>
-      <div class="education-grid">
+    <section class="section" id="education" aria-labelledby="education-title">
+      <h2 class="section-title" id="education-title" data-reveal="mask">教育与证书</h2>
+      <div class="education-grid" data-reveal="slide">
         <article class="education-main">
           <time datetime="2026-09">2026.09 - 2030.06</time>
           <h3>电子科技大学<br>成都学院</h3>
@@ -688,146 +202,44 @@
           <p>聚焦 AI 与传统制造工程的交叉应用，探索智能设计、计算机视觉与数据分析在航空制造中的具体场景。</p>
         </article>
         <div class="credentials">
-          <article class="credential"><i class="ph ph-cloud"></i><div><b>阿里云 Clouder 认证（多项）</b><span>RAG、大模型内容生产、VISION、Spring AI、AIGC、百炼智能体与 AI 编程</span></div></article>
-          <article class="credential"><i class="ph ph-seal-check"></i><div><b>达摩院人工智能训练师认证</b><span>模型训练、数据标注、模型评估与 AI 辅助应用开发</span></div></article>
+          <article class="credential"><i class="ph ph-cloud" aria-hidden="true"></i><div><b>阿里云 Clouder 认证（多项）</b><span>RAG、大模型内容生产、VISION、Spring AI、AIGC、百炼智能体与 AI 编程</span></div></article>
+          <article class="credential"><i class="ph ph-seal-check" aria-hidden="true"></i><div><b>达摩院人工智能训练师认证</b><span>模型训练、数据标注、模型评估与 AI 辅助应用开发</span></div></article>
         </div>
       </div>
-      <div class="gallery" aria-label="专业证书图片合集">
-        <figure class="cert" tabindex="0" data-title="达摩院人工智能训练师认证"><img src="assets/damoyuan.jpg" alt="达摩院人工智能训练师认证证书" loading="lazy"></figure>
-        <figure class="cert" tabindex="0" data-title="Clouder 证书 1"><img src="assets/clould1.jpg" alt="阿里云 Clouder 证书 1" loading="lazy"></figure>
-        <figure class="cert" tabindex="0" data-title="Clouder 证书 2"><img src="assets/clould2.jpg" alt="阿里云 Clouder 证书 2" loading="lazy"></figure>
-        <figure class="cert" tabindex="0" data-title="Clouder 证书 3"><img src="assets/clould3.jpg" alt="阿里云 Clouder 证书 3" loading="lazy"></figure>
-        <figure class="cert" tabindex="0" data-title="Clouder 证书 4"><img src="assets/clould4.jpg" alt="阿里云 Clouder 证书 4" loading="lazy"></figure>
-        <figure class="cert" tabindex="0" data-title="Clouder 证书 5"><img src="assets/clould5.jpg" alt="阿里云 Clouder 证书 5" loading="lazy"></figure>
-        <figure class="cert" tabindex="0" data-title="Clouder 证书 6"><img src="assets/clould6.jpg" alt="阿里云 Clouder 证书 6" loading="lazy"></figure>
-        <figure class="cert" tabindex="0" data-title="Clouder 证书 7"><img src="assets/clould7.jpg" alt="阿里云 Clouder 证书 7" loading="lazy"></figure>
+      <div data-reveal="stagger" class="gallery" aria-label="专业证书图片合集">
+        <figure class="cert" role="button" aria-haspopup="dialog" tabindex="0" data-title="达摩院人工智能训练师认证" aria-label="VIEW CERTIFICATE，查看达摩院人工智能训练师认证"><img src="assets/damoyuan.jpg" alt="达摩院人工智能训练师认证证书" loading="lazy"><figcaption>VIEW CERTIFICATE <i class="ph ph-arrow-up-right" aria-hidden="true"></i></figcaption></figure>
+        <figure class="cert" role="button" aria-haspopup="dialog" tabindex="0" data-title="Clouder 证书 1" aria-label="VIEW CERTIFICATE，查看Clouder 证书 1"><img src="assets/clould1.jpg" alt="阿里云 Clouder 证书 1" loading="lazy"><figcaption>VIEW CERTIFICATE <i class="ph ph-arrow-up-right" aria-hidden="true"></i></figcaption></figure>
+        <figure class="cert" role="button" aria-haspopup="dialog" tabindex="0" data-title="Clouder 证书 2" aria-label="VIEW CERTIFICATE，查看Clouder 证书 2"><img src="assets/clould2.jpg" alt="阿里云 Clouder 证书 2" loading="lazy"><figcaption>VIEW CERTIFICATE <i class="ph ph-arrow-up-right" aria-hidden="true"></i></figcaption></figure>
+        <figure class="cert" role="button" aria-haspopup="dialog" tabindex="0" data-title="Clouder 证书 3" aria-label="VIEW CERTIFICATE，查看Clouder 证书 3"><img src="assets/clould3.jpg" alt="阿里云 Clouder 证书 3" loading="lazy"><figcaption>VIEW CERTIFICATE <i class="ph ph-arrow-up-right" aria-hidden="true"></i></figcaption></figure>
+        <figure class="cert" role="button" aria-haspopup="dialog" tabindex="0" data-title="Clouder 证书 4" aria-label="VIEW CERTIFICATE，查看Clouder 证书 4"><img src="assets/clould4.jpg" alt="阿里云 Clouder 证书 4" loading="lazy"><figcaption>VIEW CERTIFICATE <i class="ph ph-arrow-up-right" aria-hidden="true"></i></figcaption></figure>
+        <figure class="cert" role="button" aria-haspopup="dialog" tabindex="0" data-title="Clouder 证书 5" aria-label="VIEW CERTIFICATE，查看Clouder 证书 5"><img src="assets/clould5.jpg" alt="阿里云 Clouder 证书 5" loading="lazy"><figcaption>VIEW CERTIFICATE <i class="ph ph-arrow-up-right" aria-hidden="true"></i></figcaption></figure>
+        <figure class="cert" role="button" aria-haspopup="dialog" tabindex="0" data-title="Clouder 证书 6" aria-label="VIEW CERTIFICATE，查看Clouder 证书 6"><img src="assets/clould6.jpg" alt="阿里云 Clouder 证书 6" loading="lazy"><figcaption>VIEW CERTIFICATE <i class="ph ph-arrow-up-right" aria-hidden="true"></i></figcaption></figure>
+        <figure class="cert" role="button" aria-haspopup="dialog" tabindex="0" data-title="Clouder 证书 7" aria-label="VIEW CERTIFICATE，查看Clouder 证书 7"><img src="assets/clould7.jpg" alt="阿里云 Clouder 证书 7" loading="lazy"><figcaption>VIEW CERTIFICATE <i class="ph ph-arrow-up-right" aria-hidden="true"></i></figcaption></figure>
       </div>
     </section>
 
-    <footer class="contact" aria-labelledby="contact-title">
-      <h2 id="contact-title">一起做点<br><span>真实的事</span></h2>
+    <footer id="contact" class="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" data-reveal="mask">一起做点<br><span>真实的事</span></h2>
       <div class="contact-bottom">
-        <div class="contact-list">
-          <a href="tel:15679768749">电话 15679768749</a>
-          <button class="button copy-email" type="button"><i class="ph ph-copy"></i>复制邮箱</button>
-          <span>微信 lhx2231619599</span>
-          <span>QQ 2231619599</span>
+        <div class="contact-list glass-panel">
+          <a class="contact-item" href="tel:15679768749"><i class="ph ph-phone" aria-hidden="true"></i><span><small>电话</small>15679768749</span></a>
+          <button class="contact-item copy-email" type="button"><i class="ph ph-envelope" aria-hidden="true"></i><span><small>复制邮箱</small>2231619599@qq.com</span></button>
+          <button class="contact-item" type="button" data-copy="lhx2231619599" title="复制微信号"><i class="ph ph-wechat-logo" aria-hidden="true"></i><span><small>微信</small>lhx2231619599</span></button>
+          <button class="contact-item" type="button" data-copy="2231619599" title="复制 QQ 号码"><i class="ph ph-chat-circle" aria-hidden="true"></i><span><small>QQ</small>2231619599</span></button>
         </div>
         <div class="copyright">© 2026 LIU HAOXUAN<br>AI × ENGINEERING PORTFOLIO</div>
       </div>
     </footer>
   </main>
 
-  <dialog id="viewer" aria-labelledby="viewer-title">
-    <div class="dialog-head"><strong id="viewer-title">证书预览</strong><button class="icon-button" id="viewer-close" aria-label="关闭证书预览"><i class="ph ph-x"></i></button></div>
+  <dialog class="glass-panel" id="viewer" aria-labelledby="viewer-title">
+    <div class="dialog-head"><strong id="viewer-title">证书预览</strong><button class="icon-button" id="viewer-close" aria-label="关闭证书预览"><i class="ph ph-x" aria-hidden="true"></i></button></div>
     <div class="dialog-body"><img id="viewer-image" alt="证书大图预览"></div>
   </dialog>
+  <nav class="flight-progress" aria-label="页面章节进度"><a href="#home" aria-label="01 HOME，个人首页"><span>01</span><small>HOME</small></a><a href="#experience" aria-label="02 MISSION，实践经历"><span>02</span><small>MISSION</small></a><a href="#projects" aria-label="03 PROJECT，代表项目"><span>03</span><small>PROJECT</small></a><a href="#skills" aria-label="04 SYSTEM，能力结构"><span>04</span><small>SYSTEM</small></a><a href="#education" aria-label="05 ARCHIVE，教育与证书"><span>05</span><small>ARCHIVE</small></a></nav>
+  <div class="cursor-lens" aria-hidden="true"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script>
-    const root = document.documentElement;
-    const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
-
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = themeToggle.querySelector('i');
-    function syncThemeIcon() {
-      const light = root.dataset.theme === 'light';
-      themeIcon.className = light ? 'ph ph-moon' : 'ph ph-sun';
-      themeToggle.title = light ? '切换到深色主题' : '切换到浅色主题';
-    }
-    syncThemeIcon();
-    themeToggle.addEventListener('click', () => {
-      root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
-      localStorage.setItem('lh-aviation-theme', root.dataset.theme);
-      syncThemeIcon();
-    });
-
-    const navLinks = document.getElementById('nav-links');
-
-    const tabs = [...document.querySelectorAll('.tab')];
-    tabs.forEach(tab => tab.addEventListener('click', () => {
-      tabs.forEach(item => item.setAttribute('aria-selected', String(item === tab)));
-      document.querySelectorAll('.project-panel').forEach(panel => panel.hidden = panel.id !== tab.getAttribute('aria-controls'));
-    }));
-
-    const viewer = document.getElementById('viewer');
-    const viewerImage = document.getElementById('viewer-image');
-    const viewerTitle = document.getElementById('viewer-title');
-    function openCertificate(figure) {
-      const image = figure.querySelector('img');
-      viewerImage.src = image.src;
-      viewerImage.alt = image.alt;
-      viewerTitle.textContent = figure.dataset.title;
-      viewer.showModal();
-    }
-    document.querySelectorAll('.cert').forEach(figure => {
-      figure.addEventListener('click', () => openCertificate(figure));
-      figure.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          openCertificate(figure);
-        }
-      });
-    });
-    document.getElementById('viewer-close').addEventListener('click', () => viewer.close());
-    viewer.addEventListener('click', event => { if (event.target === viewer) viewer.close(); });
-
-    const toast = document.getElementById('toast');
-    let toastTimer;
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
-    }
-    const email = ['2231619599', 'qq.com'].join('@');
-    document.querySelector('.copy-email').addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(email);
-        showToast('邮箱已复制：' + email);
-      } catch {
-        try {
-          const field = document.createElement('textarea');
-          field.value = email;
-          document.body.append(field);
-          field.select();
-          document.execCommand('copy');
-          field.remove();
-          showToast('邮箱已复制：' + email);
-        } catch {
-          showToast('复制失败，请手动记录：' + email);
-        }
-      }
-    });
-
-    document.querySelectorAll('.project-visual img, .creation-media img, .cert img').forEach(image => {
-      image.addEventListener('error', () => image.closest('.project-visual')?.classList.add('is-error'));
-    });
-
-    const reducedMotion = motionQuery.matches;
-    const reveals = document.querySelectorAll('.reveal');
-    if (reducedMotion || !('IntersectionObserver' in window)) reveals.forEach(item => item.classList.add('visible'));
-    else {
-      const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target);
-        }
-      }), { threshold: .1 });
-      reveals.forEach(item => revealObserver.observe(item));
-    }
-
-    if ('IntersectionObserver' in window) {
-      const sections = [...document.querySelectorAll('section[id]')];
-      const links = [...navLinks.querySelectorAll('a')];
-      const navObserver = new IntersectionObserver(entries => entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const target = ['highlights', 'creation'].includes(entry.target.id) ? 'home' : entry.target.id;
-        links.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + target));
-      }), { rootMargin: '-22% 0px -68%', threshold: 0 });
-      sections.forEach(section => navObserver.observe(section));
-    }
-  </script>
-  <script src="assets/aviation.js"></script>
+<script src="assets/aviation.js"></script>
 </body>
 </html>
