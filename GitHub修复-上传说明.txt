@@ -1,0 +1,23 @@
+GitHub Pages 线上样式修复说明
+
+问题原因：仓库根目录的 index.html 已更新，但它引用的新版 assets 文件没有上传，线上请求返回 404。
+
+操作：
+1. 打开 https://github.com/jackliu-hx/gerenjianjie/tree/main/assets
+2. 点击 Add file → Upload files。
+3. 将本文件夹中的 8 个文件全部拖入上传区域。上传文件本身，不要上传 ZIP。
+4. 确认页面显示的目标路径是 gerenjianjie/assets/，然后提交 Commit changes。
+5. 等待 GitHub Pages 部署完成，打开 https://jackliu-hx.github.io/gerenjianjie/?refresh=20260905
+6. 若仍是旧页面，按 Ctrl+F5 强制刷新，或使用无痕窗口打开。
+
+必须最终存在的线上路径：
+assets/aviation.css
+assets/aviation.js
+assets/Geist-Latin.woff2
+assets/Geist-OFL.txt
+assets/icons.css
+assets/Phosphor-LICENSE.txt
+assets/Phosphor-Portfolio.woff2
+assets/tank-project.png
+
+不要把这些文件上传到仓库根目录。index.html 中写的是 assets/文件名，因此必须位于 assets 文件夹内。
