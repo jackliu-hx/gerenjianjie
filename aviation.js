@@ -119,6 +119,7 @@
       this.flightPaint = light ? 'rgba(51,96,119,.16)' : 'rgba(174,224,244,.2)';
     },
     draw(time, force = false) {
+      if (document.getElementById("space-canvas")) return;
       if (!context) return;
       // Mobile draws at 30Hz with 60-68% fewer lanes. Desktop targets the display RAF.
       if (!force && !desktop.matches && time - this.lastDraw < 32) return;

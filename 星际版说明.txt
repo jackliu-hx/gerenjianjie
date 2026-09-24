@@ -1,0 +1,24 @@
+星际航空版说明
+
+打开方式：双击当前文件夹的 index.html，无需启动服务器。
+
+本版：动态深空星场、鼠标视差、程序化行星、轨道卫星、飞行器线框、超空间跃迁按钮，以及内容区悬停聚光。
+顶部暂停按钮可停止背景；系统“减少动态效果”设置也会自动生效。保留原有主题切换、项目标签、证书放大与联系方式。
+
+React Bits 参考：
+Galaxy https://reactbits.dev/backgrounds/galaxy
+Hyperspeed https://reactbits.dev/backgrounds/hyperspeed
+Spotlight Card https://reactbits.dev/components/spotlight-card
+
+这是针对原生 HTML 网站编写的 Canvas/CSS 适配实现，借鉴上述视觉方向，并非直接安装 React 组件。没有新增 CDN 或在线运行依赖。星球与飞行器为装饰性科幻视觉，不代表真实飞行遥测或本人项目。
+
+新增文件：assets/interstellar.css、assets/interstellar.js。
+原始 index.html 和 aviation.css / aviation.js 已保存在“更新前备份-星际版-20260924”开头的文件夹。其余原有图片等资产未更改。
+
+2026-09-24 液态玻璃更新：
+参考 https://fklnk.github.io/-/ 的玻璃边缘高光与水波背景交互思路，新增 assets/liquid-space.js。
+导航、成果卡片、按钮、项目说明和联系面板采用网页端 iOS 风格玻璃近似效果；并非苹果原生组件。
+鼠标经过背景：局部折射与渐隐涟漪；点击：扩散波纹。玻璃边缘高光跟随鼠标。
+新增 WebGL 画面后处理，仅处理背景，不扭曲简历文字；不支持 WebGL 或上下文丢失时自动显示原有 Canvas 星空。
+已做脚本语法、资源引用、模拟环境下的交互/暂停/减少动态/主题/降级逻辑检查，尚未完成真实浏览器视觉验收。
+本次改动前文件已保存到“更新前备份-液态玻璃”开头的文件夹。
