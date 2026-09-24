@@ -6,7 +6,7 @@
   <meta name="description" content="刘浩炫的工程、AI、项目与实践履历">
   <meta name="theme-color" content="#050B10">
   <meta name="robots" content="index, follow">
-  <title>刘浩炫 | AERO GLASS · Flight Lab</title>
+  <title>刘浩炫 | 星际航行 · 飞行器制造工程</title>
   <link rel="preload" href="assets/hero-ai-aero.webp" as="image" type="image/webp">
   <link rel="stylesheet" href="assets/icons.css">
   <script>
@@ -19,6 +19,7 @@
     } })();
   </script>
 <link rel="stylesheet" href="assets/aviation.css">
+<link rel="stylesheet" href="assets/interstellar.css">
   <script>
     (() => {
       try {
@@ -37,6 +38,7 @@
   </style>
 </head>
 <body>
+  <canvas class="space-canvas" id="space-canvas" aria-hidden="true"></canvas>
   <div class="aviation-background" aria-hidden="true">
     <div class="ambient-light"></div>
     <div class="engineering-grid"></div>
@@ -68,7 +70,7 @@
   <main id="content">
     <section class="hero" id="home" aria-labelledby="hero-title">
       <div class="hero-aircraft" aria-hidden="true"><div class="aircraft-scene"><img src="assets/hero-ai-aero.webp" alt="" width="1672" height="941" fetchpriority="high"></div></div>
-      <div class="hero-hud hud-top" aria-hidden="true"><span>AERO GLASS / FLIGHT LAB</span><span>AIRCRAFT MANUFACTURING</span></div>
+      <div class="hero-hud hud-top" aria-hidden="true"><span>DEEP SPACE / FLIGHT LAB</span><span>AIRCRAFT MANUFACTURING</span></div>
       <div class="hero-hud hud-side" aria-hidden="true"><span class="hud-cross"></span><span>ENGINEERING<br>× ARTIFICIAL INTELLIGENCE</span><span class="hud-scale"></span></div>
 
       <div class="hero-inner">
@@ -79,7 +81,9 @@
           <a class="button primary" href="#projects"><i class="ph ph-arrow-down-right" aria-hidden="true"></i>查看代表项目</a>
           <a class="button" href="tel:15679768749"><i class="ph ph-phone" aria-hidden="true"></i>联系我</a>
         </div>
+        <button class="warp-control" id="warp-toggle" type="button" aria-pressed="false"><i class="ph ph-airplane-in-flight" aria-hidden="true"></i><span>体验超空间跃迁</span></button>
       </div>
+      <div class="orbit-caption" aria-hidden="true">BEYOND THE HORIZON<span>飞行器制造 / AI / 智能制造</span></div>
       <div class="metrics-rail glass-panel" tabindex="0" id="highlights" aria-label="核心成果">
         <div class="metric"><b data-reveal="number">Top 15%</b><span>全国 3,000+ 新人中的同期排名</span></div>
         <div class="metric"><b data-reveal="number">40%</b><span>团队整体人效提升</span></div>
@@ -251,5 +255,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="assets/aviation.js"></script>
+<script src="assets/interstellar.js"></script>
 </body>
 </html>
